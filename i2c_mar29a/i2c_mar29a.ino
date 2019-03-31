@@ -9,9 +9,9 @@ void setup() {
 }
 
 void loop() {
-  // request 6 bytes from slave device #0xDD
-  Wire.requestFrom(0xEC, 6); //Look Datasheet
-
+  Wire.beginTransmission(0x76);// start a connection with slave device
+  Wire.write(0xD0);//select the register adress
+  Wire.requestFrom(0x76, 1); //number of bytes to read
   // slave may send less than requested
   while (Wire.available())
   {
@@ -21,6 +21,6 @@ void loop() {
     // print the character
     Serial.printf("Received: %02X\n", c);
   }
-
   delay(500);
+  Wire.endTransmission();
 }

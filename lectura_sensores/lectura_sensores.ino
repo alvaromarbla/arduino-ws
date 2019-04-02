@@ -45,14 +45,18 @@ void loop()
   while (Wire.available())
   {
   /* Receive the byte */
+  uint8_t pres1=Wire.read();
+  uint8_t pres2=Wire.read(); 
+  uint8_t pres3=Wire.read(); 
+
+  uint8_t temp1=Wire.read();
+  uint8_t temp2=Wire.read();  
+  uint8_t temp3=Wire.read(); 
+
   uint8_t hum1 = Wire.read();
   uint8_t hum2 = Wire.read();
 
-  uint8_t temp1=Wire.read();
-  uint8_t temp2=Wire.read();
 
-  uint8_t pres1=Wire.read();
-  uint8_t pres2=Wire.read();
   
   uint16_t hum=hum1;
   uint16_t temp=temp1;

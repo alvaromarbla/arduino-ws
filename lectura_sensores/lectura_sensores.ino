@@ -19,20 +19,27 @@ void loop()
   
   /*Begin transmission*/
   Wire.beginTransmission(0x76);
-
+  
+  /*Start hum device*/
   Wire.write(0xF2);
   Wire.write(B001);
 
-  /*Write chipID register*/
+  /*Start t&p device*/
   Wire.write(0xF4);
   Wire.write(B00100111);
 
-
-    Wire.write(0xFD);
-
+  /*Write in Data acquisition direction for hum*/
+  Wire.write(0xFD);
+  
+  /*Write in Data acquisition direction for temp*/
+  Wire.write(0xFA);
+  
+  /*Write in Data acquisition direction for pres*/
+  Wire.write(0xF7);
+  
       /* Request data from slave with address 0x76 */
 
-  Wire.requestFrom(0x76, 2);
+  Wire.requestFrom(0x76, 8);
 
   /* Wait for data to be available */
   while (Wire.available())
@@ -41,12 +48,34 @@ void loop()
   uint8_t hum1 = Wire.read();
   uint8_t hum2 = Wire.read();
 
-  uint16_t humtot=hum1;
-  humtot=humtot<<8;
-  humtot=humtot+hum2;
+  uint8_t temp1=Wire.read();
+  uint8_t temp2=Wire.read();
+
+  uint8_t pres1=Wire.read();
+  uint8_t pres2=Wire.read();
+  
+  uint16_t hum=hum1;
+  uint16_t temp=temp1;
+  uint16_t pres=pres1;
+  
+  hum=hum<<8;
+  hum=hum+hum2;
+
+  temp=temp<<8;
+  temp=temp+temp2;
+
+  pres=pres<<8;
+  pres=pres+pres2;
 
     /* Send it to console/monitor */
-    Serial.printf("Received byte: %02X %02X \n", hum1,hum2);
+    Serial.printf("Received byte: %02X %02X %02X %u \n", hum1,hum2,hum,hum);
+    Serial.printf("Recibido Humedad \n---\n");
+
+    Serial.printf("Received byte: %02X %02X %02X %u \n", temp1,temp2,temp,temp);
+    Serial.printf("Recibido Temperatura \n---\n");
+
+    Serial.printf("Received byte: %02X %02X %02X %u \n", pres1,pres2,pres,pres);
+    Serial.printf("Recibido Presión \n---\n");
   }
      /*End transmission */
 

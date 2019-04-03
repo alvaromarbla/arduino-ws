@@ -28,14 +28,15 @@ void loop()
   Wire.write(0xF4);
   Wire.write(B00100111);
 
-  /*Write in Data acquisition direction for hum*/
-  Wire.write(0xFD);
+  /*Write in Data acquisition direction for pres*/
+  Wire.write(0xF7);
   
   /*Write in Data acquisition direction for temp*/
   Wire.write(0xFA);
   
-  /*Write in Data acquisition direction for pres*/
-  Wire.write(0xF7);
+  /*Write in Data acquisition direction for hum*/
+  Wire.write(0xFD);
+  
   
       /* Request data from slave with address 0x76 */
 
@@ -75,10 +76,10 @@ void loop()
     Serial.printf("Received byte: %02X %02X %02X %u \n", hum1,hum2,hum,hum);
     Serial.printf("Recibido Humedad \n---\n");
 
-    Serial.printf("Received byte: %02X %02X %02X %u \n", temp1,temp2,temp,temp);
+    Serial.printf("Received byte: %u %u \n", temp1,temp2);
     Serial.printf("Recibido Temperatura \n---\n");
 
-    Serial.printf("Received byte: %02X %02X %02X %u \n", pres1,pres2,pres,pres);
+    Serial.printf("Received byte:  %u %u \n", pres1,pres2);
     Serial.printf("Recibido Presión \n---\n");
   }
      /*End transmission */

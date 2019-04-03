@@ -30,6 +30,11 @@ void setup()
  
 
 }
+uint32_t callarray(uint16_t pos);
+static uint32_t data;
+data=arr[pos]<<12+arr[pos+1]<<4;
+return data;
+
 
 /* Recurrent task, called forever */
 void loop()
@@ -45,6 +50,7 @@ void loop()
 
   static uint8_t arr[128];
   uint16_t arr_i=0;
+  
   /* Wait for data to be available */
   while (Wire.available() && arr_i<=128)
   {    
@@ -55,7 +61,7 @@ void loop()
 
 
     /* Send it to console/monitor */
-    Serial.printf("Received byte: %u \n", arr);
+    Serial.printf("Received byte: %u \n", arr[arr_i]);
      /*End transmission */
 
   }

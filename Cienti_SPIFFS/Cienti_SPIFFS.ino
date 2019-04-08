@@ -13,7 +13,7 @@ void setup()
 
   /* Initialize the file system */
   Serial.printf("Initializing SPIFFS\n");
-  if (SPIFFS.begin(0,2) == false)
+  if (SPIFFS.begin() == false)
   {
     Serial.printf("SPIFFS cannot be initialized\n");
 

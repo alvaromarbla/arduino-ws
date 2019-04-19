@@ -118,7 +118,6 @@ void setup()
 }
 /*
  * This function will fill a structure with sensor data
- * For this example, is just fake data
  * - Returns 0 if OK. Non 0 for error or warning
  */
 int get_sensor_data(struct sensor_data *sdata)

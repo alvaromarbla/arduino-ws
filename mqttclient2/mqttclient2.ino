@@ -11,12 +11,12 @@ ADC_MODE(ADC_VCC);
 /* This block allows to be configured outside this code, but will use
  * the following information as default in case is not */
 #if !defined(STASSID)
-  #define STASSID "ONO758312"
-  #define STAPSK  "RVLAXPMH"
+  #define STASSID "IoTesla"
+  #define STAPSK  "euroavia2019"
 #endif
 
-/* Define the MQTT host and port to connect to */
-const char    *mqtt_host     = "192.168.1.1";
+/* Define the MQTT host and port to connect to (192.168.1.1 belongs to Cienti's router) */
+const char    *mqtt_host     = "iot.tesla.studio";
 const uint16_t mqtt_port     = 1883;
 const char    *mqtt_user     = "tc_d1_0007";
 const char    *mqtt_pass     = "euroavia2019";
@@ -80,7 +80,7 @@ void setup()
   WiFi.mode(WIFI_STA);
 
   /* Add your home/personal wifi here */
-  WiFiMulti.addAP("personal-wifi", "the_password");
+  WiFiMulti.addAP("ONO758312", "RVLAXPMH");
 
   /* If not found, will try to connect to this one */
   WiFiMulti.addAP("IoTesla",       "euroavia2019");

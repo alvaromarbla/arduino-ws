@@ -99,7 +99,6 @@ void setup()
   /* If not found, will try to connect to this one */
   WiFiMulti.addAP("IoTesla",       "euroavia2019");
   mqttClient.begin(mqtt_host, mqtt_port, espClient);
-}
 
 /* -- Configure the sensor --
    *  - Read  the  datasheet -
@@ -116,7 +115,7 @@ void setup()
   BME280_obj.setHumidityOverSample(1);
   /* MODE_SLEEP, MODE_FORCED, MODE_NORMAL is valid.    | See 3.3       */
   BME280_obj.setMode(MODE_NORMAL);
-
+}
 /*
  * This function will fill a structure with sensor data
  * For this example, is just fake data

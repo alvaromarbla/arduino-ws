@@ -29,7 +29,7 @@ const char *topic_list[3] =
   /* euroavia-pool/USERNAME/# */
   "euroavia-pool/%s/%s",
   /* euroavia-devices/USERNAME/# */
-  "euroavia-devices/%s/%s"
+  "euroavia-devices/tc_d1_0007/#"
 };
 #define PUBLIC_SUSCRIBE 0
 #define PUBLIC_PUBLISH  1

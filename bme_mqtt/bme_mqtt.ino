@@ -41,7 +41,7 @@ const char *topic_list[3] =
   /* euroavia-pool/USERNAME/# */
   "euroavia-pool/%s/%s",
   /* euroavia-devices/USERNAME/# */
-  "euroavia-devices/tc_d1_0007/#"
+  "euroavia-devices/%s/%s"
 };
 #define PUBLIC_SUSCRIBE 0
 #define PUBLIC_PUBLISH  1
@@ -80,6 +80,10 @@ void setup()
 {
   /* Start serial for output */
   Serial.begin(115200);
+
+    /* Join I2C bus and set it to 400 kHz */
+  Wire.begin(0, 2);
+  Wire.setClock(400000);
   /* Address the sensor */
   BME280_obj.setI2CAddress(SLAVE_ADDRESS);
   
@@ -139,26 +143,20 @@ int upload_sensor_data(struct sensor_data *sdata)
 {
   static int res;
 
-  /* Compose a JSON string with sensor data */
-  snprintf(buf_data, BUF_DATA_MAX,
-           "{"
-           " tmp: %.2f,"
-           " hum: %.2f,"
-           " prs: %.2f,"
-           " alt: %.2f,"
-           " vcc: %.2f "
-           "}",
-           sdata->temperature,
-           sdata->humidity,
-           sdata->pressure,
-           sdata->altitude,
-           sdata->supply_vcc
-           );
-  res = mqttClient.publish(get_topic_name(PUBLIC_PUBLISH, "sensors"), buf_data);
+  /* Compose a float string with sensor data */
+snprintf(buf_data,BUF_DATA_MAX,"%.2f",sdata->temperature);
+mqttClient.publish(get_topic_name(PUBLIC_PUBLISH,"tmp"),buf_data);
+
+snprintf(buf_data,BUF_DATA_MAX,"%.2f",sdata->pressure);
+mqttClient.publish(get_topic_name(PUBLIC_PUBLISH,"prs"),buf_data);
+
+snprintf(buf_data,BUF_DATA_MAX,"%.2f",sdata->altitude);
+mqttClient.publish(get_topic_name(PUBLIC_PUBLISH,"alt"),buf_data);
+ 
   Serial.printf("Sensor data published ... %s\n", (res)?"OK":"FAIL");
 
   /* Opposite interface here, 1 for OK is translated to 0 for OK */
-  return res?0:1;
+  return 0;
 }
 
 /*
@@ -180,6 +178,7 @@ char *get_topic_name(uint8_t topic_id, char *endpoint)
 
     /* Need 2 variable sustitutitons */
     case PUBLIC_PUBLISH:
+     
     case PRIVATE_USAGE:
       snprintf(topic_name, TOPIC_NAME_MAX, topic_list[topic_id],
                mqtt_user, endpoint);

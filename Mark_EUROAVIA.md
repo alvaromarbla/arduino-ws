@@ -21,3 +21,7 @@ Se pegará con cinta aislante a la pared del cono del cohete con la conexión de
 ### 3º Tasa máxima para cada dato.
 
 ????
+
+### 4º Datos a salvar y transmitir
+
+Para ahorrar en tiempo y complejidad, sólo es completamente necesario extraer los datos del altura del BME. Si sobrara tiempo, sería interesante calibrar y tomar datos de **posición** del MPU. 

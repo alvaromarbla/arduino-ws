@@ -26,7 +26,27 @@ void setup() {
     /* Stop here (WDT will reset at some point) */
     while(1);
 }
+ /* -- Configure the sensor --
+   *  - Read  the  datasheet -
+   */
+  /* Filter coefficient.          | 0 to 4 is valid.   | See 3.4.4     */
+  BME280_obj.setFilter(2);
+  /* Time between readings.       | 0 to 7 valid.      | See table 27. */
+  BME280_obj.setStandbyTime(1);
+  /* 0 disables temp sensing.     | 0 to 16 are valid. | See table 24. */
+  BME280_obj.setTempOverSample(2);
+  /* 0 disables pressure sensing. | 0 to 16 are valid. | See table 23. */
+  BME280_obj.setPressureOverSample(16);
+  /* 0 disables humidity sensing. | 0 to 16 are valid. | See table 19. */
+  BME280_obj.setHumidityOverSample(1);
+  /* MODE_SLEEP, MODE_FORCED, MODE_NORMAL is valid.    | See 3.3       */
+  BME280_obj.setMode(MODE_NORMAL);
 }
+
+/*
+ * Recurrent task, called forever
+ */
+
 void loop() {
    /* Welcome message! Useful as a control point */
   Serial.printf("Ahoy! ESP8266 here!\n"

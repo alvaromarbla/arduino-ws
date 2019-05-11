@@ -86,6 +86,9 @@ void setup() {
   {
     Serial.printf("SPIFFS cannot be initialized\n");
     }
+
+                                //BME SETTING BLOCK//
+
    /* Address the sensor */
   BME280_obj.setI2CAddress(SLAVE_ADDRESS);
 
@@ -113,7 +116,11 @@ void setup() {
   /* MODE_SLEEP, MODE_FORCED, MODE_NORMAL is valid.    | See 3.3       */
   BME280_obj.setMode(MODE_NORMAL);
 
-    
+                             //END OF BME SETTING BLOCK//
+
+                             //WIFI PASSWORDS BLOCK//
+
+
    /* Ensure to work as Station (disables internal AP) */
   WiFi.mode(WIFI_STA);
 
@@ -126,6 +133,9 @@ void setup() {
   /* If not found, will try to connect to this one */
   WiFiMulti.addAP("IoTesla",       "euroavia2019");
 }
+
+
+                              //END OF WIFI PASSWORDS BLOCK//
 /*
  * This function will fill a structure with sensor data
  * For this example, is just fake data
@@ -243,6 +253,8 @@ void loop() {
 
    /*Avoid overwriting on COM */              
     delay(1000);
+    
+                            //SPIFFS BLOCK//
 
   File test_file;
   #define MY_STR_LEN 1024
@@ -273,7 +285,13 @@ void loop() {
   else
   {
     Serial.printf("Opened '" TESTFILE "'\n");
-  
+   }
+
+                            //END OF SPIFFS BLOCK//
+
+
+
+                             //WIFI BLOCK//
 /* Are we connected */
   if (WiFiMulti.run() == WL_CONNECTED)
   {
@@ -309,5 +327,7 @@ void loop() {
       }
     }
   }
- } 
+
+                               //END OF WIFI BLOCK//
+
 }

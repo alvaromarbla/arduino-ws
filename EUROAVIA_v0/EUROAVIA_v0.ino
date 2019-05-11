@@ -2,11 +2,14 @@
 
 #include  <Wire.h>
 #include "SparkFunBME280.h"
-#define SLAVE_ADDRESS 0x76
 #include <ESP8266WiFi.h>
 #include <ESP8266WiFiMulti.h>
 /* https://github.com/knolleary/pubsubclient */
 #include <PubSubClient.h>
+#include <FS.h>
+
+#define SLAVE_ADDRESS 0x76
+#define TESTFILE "/test_file.txt"
 
 /* This allows 'ESP.getVcc()' to be used */
 ADC_MODE(ADC_VCC);
@@ -76,7 +79,13 @@ void setup() {
     /* join i2c bus (address optional for master)*/
   Wire.begin(0, 2); //SDA and SCL//
   Wire.setClock(400000);/*set to 400 kHz
-
+  
+/* Initialize the file system */
+  Serial.printf("Initializing SPIFFS\n");
+  if (SPIFFS.begin() == false)
+  {
+    Serial.printf("SPIFFS cannot be initialized\n");
+    }
    /* Address the sensor */
   BME280_obj.setI2CAddress(SLAVE_ADDRESS);
 
@@ -104,13 +113,7 @@ void setup() {
   /* MODE_SLEEP, MODE_FORCED, MODE_NORMAL is valid.    | See 3.3       */
   BME280_obj.setMode(MODE_NORMAL);
 
- /* Welcome message! Useful as a control point */
-  Serial.printf("Ahoy! ESP8266 here!\n"
-                "---\n"
-                "> Testing: knolleary's PubSubClient.h library\n"
-                "---\n"
-                );
-
+    
    /* Ensure to work as Station (disables internal AP) */
   WiFi.mode(WIFI_STA);
 
@@ -123,7 +126,6 @@ void setup() {
   /* If not found, will try to connect to this one */
   WiFiMulti.addAP("IoTesla",       "euroavia2019");
 }
-
 /*
  * This function will fill a structure with sensor data
  * For this example, is just fake data
@@ -236,7 +238,42 @@ void mqtt_connect()
  */
 
 void loop() {
- 
+ /* Welcome message! Useful as a control point */
+  Serial.printf("Ahoy! ESP8266 here!\n---\n");
+
+   /*Avoid overwriting on COM */              
+    delay(1000);
+
+  File test_file;
+  #define MY_STR_LEN 1024
+  uint8_t my_string[MY_STR_LEN];
+  uint16_t my_line = 0;
+
+  /* The file already exist? */
+  if (SPIFFS.exists(TESTFILE))
+  {
+    Serial.printf("File '" TESTFILE "'' IS found'\n");
+  }
+  else
+  {
+    Serial.printf("File '" TESTFILE "'' NOT found'\n");
+  }
+
+  /* Mode 'a+' create if not exists:
+   *  - Read from the beginning of the file
+   *  - Append new data at the end
+   *  * Useful for buffers ;)
+   */
+  test_file = SPIFFS.open(TESTFILE, "a+");
+  if (!test_file)
+  {
+    /* Oh man, this is serious */
+    Serial.printf("Cannot open '" TESTFILE "'' for appending'\n");
+  }
+  else
+  {
+    Serial.printf("Opened '" TESTFILE "'\n");
+  
 /* Are we connected */
   if (WiFiMulti.run() == WL_CONNECTED)
   {
@@ -272,9 +309,5 @@ void loop() {
       }
     }
   }
-
-
-
-
- 
+ } 
 }

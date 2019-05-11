@@ -145,7 +145,7 @@ int get_sensor_data(struct sensor_data *sdata)
 {
   sdata->temperature = BME280_obj.readTempC();
   sdata->humidity    = BME280_obj.readFloatHumidity();
-  sdata->pressure    = (10000.0 + random(5000))/100;
+  sdata->pressure    = BME280_obj.readFloatPressure();
   sdata->altitude    = BME280_obj.readFloatAltitudeMeters();
   sdata->supply_vcc  = 1.0 * ESP.getVcc();
   return 0;
@@ -286,6 +286,29 @@ void loop() {
   {
     Serial.printf("Opened '" TESTFILE "'\n");
    }
+
+    
+ /* Get the sensor data into our structure */
+    if (get_sensor_data(&sdata))
+    {
+      Serial.printf("Error while reading sensors data\n");
+      return;
+    }
+
+ 
+ /* Opened, now put some (at the end of the file) */
+    Serial.printf("Filling file '" TESTFILE "' with some data\n");
+    
+    test_file.printf();
+
+    /* Done, free/close the file */
+    test_file.close();
+
+    delay(1000);
+
+
+
+
 
                             //END OF SPIFFS BLOCK//
 

@@ -286,7 +286,6 @@ void loop() {
   {
     Serial.printf("Opened '" TESTFILE "'\n");
    }
-
     
  /* Get the sensor data into our structure */
     if (get_sensor_data(&sdata))
@@ -294,7 +293,6 @@ void loop() {
       Serial.printf("Error while reading sensors data\n");
       return;
     }
-
  
  /* Opened, now put some (at the end of the file) */
     Serial.printf("Filling file '" TESTFILE "' with some data\n");
@@ -332,11 +330,11 @@ void loop() {
     }
 
     /* Get the sensor data into our structure */
-    if (get_sensor_data(&sdata))
+    /*if (get_sensor_data(&sdata))
     {
       Serial.printf("Error while reading sensors data\n");
       return;
-    }
+    }*/
 
     /* If more than 2.5s passed since last message, sent another one */
     millis_now = millis();

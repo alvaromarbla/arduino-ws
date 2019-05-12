@@ -298,13 +298,16 @@ void loop() {
  
  /* Opened, now put some (at the end of the file) */
     Serial.printf("Filling file '" TESTFILE "' with some data\n");
+    String dataString="";
+    float ALT=BME280_obj.readFloatAltitudeMeters();
+    dataString+=String(ALT);
     
-    test_file.printf();
-
+    test_file.println(dataString);
+    Serial.printf(" - Alt..: %2.2f [m]\n",ALT);
     /* Done, free/close the file */
-    test_file.close();
+    //test_file.close();//
 
-    delay(1000);
+    delay(500);
 
 
 

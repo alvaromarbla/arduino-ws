@@ -177,6 +177,28 @@ int upload_sensor_data(struct sensor_data *sdata)
   return res?0:1;
 }
 
+int save_sensor_data(struct sensor_data *sdata)
+{
+  static int saveres;
+
+  /* Compose a JSON string with sensor data */
+  saveres = 1;
+  snprintf(buf_data, BUF_DATA_MAX, "%.2f", sdata->temperature);
+  saveres = saveres * 
+  snprintf(buf_data, BUF_DATA_MAX, "%.2f", sdata->humidity);
+  saveres = saveres *
+  snprintf(buf_data, BUF_DATA_MAX, "%.2f", sdata->altitude);
+  saveres = saveres * mqttClient.publish(get_topic_name(PUBLIC_PUBLISH, "alt"), buf_data);
+  Serial.printf("Sensor data saved ... %s\n", (saveres)?"OK":"FAIL");
+
+  /* Opposite interface here, 1 for OK is translated to 0 for OK */
+  return saveres?0:1;
+}
+
+
+
+
+
 /*
  * Build a topic string and return a pointer to it
  */
@@ -257,9 +279,7 @@ void loop() {
                             //SPIFFS BLOCK//
 
   File test_file;
-  #define MY_STR_LEN 1024
-  uint8_t my_string[MY_STR_LEN];
-  uint16_t my_line = 0;
+  
 
   /* The file already exist? */
   if (SPIFFS.exists(TESTFILE))
@@ -293,20 +313,20 @@ void loop() {
       Serial.printf("Error while reading sensors data\n");
       return;
     }
- 
+
+  /* Save the sensor data into the SPIFFS memory*/
+    if (save_sensor_data(&sdata))
+    {
+      Serial.printf("Error while saving sensors data\n");
+      return;
+    }
  /* Opened, now put some (at the end of the file) */
     Serial.printf("Filling file '" TESTFILE "' with some data\n");
-    String dataString="";
-    float ALT=BME280_obj.readFloatAltitudeMeters();
-    dataString+=String(ALT);
     
-    test_file.println(dataString);
-    Serial.printf(" - Alt..: %2.2f [m]\n",ALT);
     /* Done, free/close the file */
     //test_file.close();//
 
     delay(500);
-
 
 
 

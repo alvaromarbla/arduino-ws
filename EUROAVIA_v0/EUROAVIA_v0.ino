@@ -155,6 +155,8 @@ int get_sensor_data(struct sensor_data *sdata)
  * it to MQTT broker
  * - Returns 0 if OK. Non 0 for error or warning
  */
+
+               //UPLOADING DATA FUNCTION//
 int upload_sensor_data(struct sensor_data *sdata)
 {
   static int res;
@@ -177,6 +179,11 @@ int upload_sensor_data(struct sensor_data *sdata)
   return res?0:1;
 }
 
+
+                                //SAVING DATA FUNCTION//
+
+  File test_file;
+
 int save_sensor_data(struct sensor_data *sdata)
 {
   static int saveres;
@@ -184,11 +191,12 @@ int save_sensor_data(struct sensor_data *sdata)
   /* Compose a JSON string with sensor data */
   saveres = 1;
   snprintf(buf_data, BUF_DATA_MAX, "%.2f", sdata->temperature);
-  saveres = saveres * 
   snprintf(buf_data, BUF_DATA_MAX, "%.2f", sdata->humidity);
-  saveres = saveres *
+  //saveres = saveres *//
   snprintf(buf_data, BUF_DATA_MAX, "%.2f", sdata->altitude);
-  saveres = saveres * mqttClient.publish(get_topic_name(PUBLIC_PUBLISH, "alt"), buf_data);
+  //saveres = saveres * mqttClient.publish(get_topic_name(PUBLIC_PUBLISH, "alt"), buf_data);//
+  saveres = saveres * test_file.printf(buf_data);
+
   Serial.printf("Sensor data saved ... %s\n", (saveres)?"OK":"FAIL");
 
   /* Opposite interface here, 1 for OK is translated to 0 for OK */
@@ -278,7 +286,6 @@ void loop() {
     
                             //SPIFFS BLOCK//
 
-  File test_file;
   
 
   /* The file already exist? */
